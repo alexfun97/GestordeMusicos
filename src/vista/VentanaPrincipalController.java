@@ -34,7 +34,7 @@ public class VentanaPrincipalController {
 	private TableView<Cantante> tablaCantante;
 	
 	@FXML
-    private TableColumn<Cantante, String> tcID;
+    private TableColumn<Cantante, Integer> tcID;
 	
 	@FXML
     private TableColumn<Cantante, String> tcNombre;
@@ -46,7 +46,7 @@ public class VentanaPrincipalController {
     private TableColumn<Cantante, String> tcNacionalidad;
 	
 	@FXML
-    private TableColumn<Cantante, String> tcGenero;
+    private TableColumn<Cantante, Integer> tcGenero;
 	
 	
 	
@@ -55,17 +55,17 @@ public class VentanaPrincipalController {
 	public void initialize() {
 		modelo = new Modelo();
 		tablaCantante.setItems(modelo.transicionDatos());
-		tcID.setCellValueFactory(new PropertyValueFactory<Cantante,String>("ID"));
+		tcID.setCellValueFactory(new PropertyValueFactory<Cantante,Integer>("ID"));
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nacionalidad"));
-		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Genero"));
+		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante,Integer>("Genero"));
 		modelo.transicionDatos();
 		
 	}
 	
 	public void insertarDatos() {
-		Cantante cantante = new Cantante(txtNombre.getText(), txtFechaNac.getText(), txtNacionalidad.getText(), txtGenero.getText());
+		Cantante cantante = new Cantante(txtNombre.getText(), txtFechaNac.getText(), txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
 		modelo.insercionDatos(cantante);
 		this.initialize();
 	}

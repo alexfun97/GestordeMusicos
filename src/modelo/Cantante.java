@@ -2,13 +2,13 @@ package modelo;
 
 public class Cantante {
 	
-	private String ID;
+	private int ID;
 	private String Nombre;
 	private String Nacimiento;
 	private String Nacionalidad;
-	private String Genero;
+	private int Genero;
 	
-	public Cantante(String iD, String nombre, String nacimiento, String nacionalidad, String genero) {
+	public Cantante(int iD, String nombre, String nacimiento, String nacionalidad, int genero) {
 		ID = iD;
 		Nombre = nombre;
 		Nacimiento = nacimiento;
@@ -16,18 +16,18 @@ public class Cantante {
 		Genero = genero;
 	}
 	
-	public Cantante(String nombre, String nacimiento, String nacionalidad, String genero) {
+	public Cantante(String nombre, String nacimiento, String nacionalidad, int genero) {
 		Nombre = nombre;
 		Nacimiento = nacimiento;
 		Nacionalidad = nacionalidad;
 		Genero = genero;
 	}
 
-	public String getID() {
+	public int getID() {
 		return ID;
 	}
 
-	public void setID(String iD) {
+	public void setID(int iD) {
 		ID = iD;
 	}
 
@@ -55,11 +55,11 @@ public class Cantante {
 		Nacionalidad = nacionalidad;
 	}
 
-	public String getGenero() {
+	public int getGenero() {
 		return Genero;
 	}
 
-	public void setGenero(String genero) {
+	public void setGenero(int genero) {
 		Genero = genero;
 	}
 	

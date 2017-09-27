@@ -32,7 +32,7 @@ public class Modelo {
 		try {
 			ResultSet resultado = conex.createStatement().executeQuery("SELECT * FROM cantante");
 			while (resultado.next()){
-				cantantes.add(new Cantante(resultado.getString("ID"), resultado.getString("nombre"), resultado.getString("fechaNac"), resultado.getString("nacionalidad"), resultado.getString("genero")));
+				cantantes.add(new Cantante(resultado.getInt("ID"), resultado.getString("nombre"), resultado.getString("fechaNac"), resultado.getString("nacionalidad"), resultado.getInt("genero")));
 			}
 			
 		} catch (SQLException e) {
@@ -50,12 +50,12 @@ public class Modelo {
 			String nombre = cantante.getNombre();
 			String fechaNac = cantante.getNacimiento();
 			String nacionalidad = cantante.getNacionalidad();
-			String genero = cantante.getGenero();
+			int genero = cantante.getGenero();
 			
 			resultado.setString(1,nombre);
 			resultado.setString(2,fechaNac);
 			resultado.setString(3,nacionalidad);
-			resultado.setString(4,genero);
+			resultado.setInt(4,genero);
 			resultado.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
