@@ -22,18 +22,16 @@
             <TableColumn fx:id="tcGenero" prefWidth="75.0" text="Género" />
          </columns>
       </TableView>
-      <Label layoutX="14.0" layoutY="14.0" text="ID" />
-      <TextField fx:id="txtID" layoutX="14.0" layoutY="41.0" />
-      <Label layoutX="14.0" layoutY="93.0" text="Nombre" />
-      <TextField fx:id="txtNombre" layoutX="14.0" layoutY="120.0" />
-      <Label layoutX="14.0" layoutY="172.0" text="Fecha de nacimiento" />
-      <TextField fx:id="txtFechaNac" layoutX="14.0" layoutY="199.0" />
-      <Label layoutX="14.0" layoutY="251.0" text="Nacionalidad" />
-      <TextField fx:id="txtNacionalidad" layoutX="14.0" layoutY="278.0" />
-      <Label layoutX="14.0" layoutY="330.0" text="Género" />
-      <TextField fx:id="txtGenero" layoutX="14.0" layoutY="357.0" />
+      <Label layoutX="19.0" layoutY="39.0" text="Nombre" />
+      <TextField fx:id="txtNombre" layoutX="19.0" layoutY="66.0" />
+      <Label layoutX="19.0" layoutY="118.0" text="Fecha de nacimiento" />
+      <TextField fx:id="txtFechaNac" layoutX="19.0" layoutY="145.0" />
+      <Label layoutX="19.0" layoutY="197.0" text="Nacionalidad" />
+      <TextField fx:id="txtNacionalidad" layoutX="19.0" layoutY="224.0" />
+      <Label layoutX="19.0" layoutY="276.0" text="Género" />
+      <TextField fx:id="txtGenero" layoutX="19.0" layoutY="303.0" />
       <Separator layoutX="236.0" layoutY="-8.0" orientation="VERTICAL" prefHeight="468.0" prefWidth="0.0" />
-      <Button fx:id="btnAñadir" layoutX="13.0" layoutY="414.0" mnemonicParsing="false" onAction="#insertarDatos" prefHeight="31.0" prefWidth="98.0" text="Añadir" />
-      <Button layoutX="122.0" layoutY="414.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="98.0" text="Borrar" />
+      <Button fx:id="btnAñadir" layoutX="21.0" layoutY="414.0" mnemonicParsing="false" onAction="#insertarDatos" prefHeight="31.0" prefWidth="98.0" text="Añadir" />
+      <Button layoutX="127.0" layoutY="414.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="98.0" text="Borrar" />
    </children>
 </AnchorPane>
