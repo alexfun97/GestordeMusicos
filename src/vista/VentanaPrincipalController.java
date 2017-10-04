@@ -1,8 +1,13 @@
 package vista;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+
 import controlador.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -12,14 +17,13 @@ import modelo.Modelo;
 
 public class VentanaPrincipalController {
 
-	private Main ProgramaPrincipal;
 	private Modelo modelo;
 	
 	@FXML
     private TextField txtNombre;
 	
 	@FXML
-    private TextField txtFechaNac;
+    private DatePicker dateFechaNac;
 	
 	@FXML
     private TextField txtNacionalidad;
@@ -31,6 +35,21 @@ public class VentanaPrincipalController {
     private Button btnAñadir;
 	
 	@FXML
+    private Button btnAñadirVarios;
+	
+	@FXML
+    private Button btnAceptarAñadirVarios;
+	
+	@FXML
+    private Button btnCancelarAñadirVarios;
+	
+	@FXML
+    private Button btnBorrar;
+	
+	@FXML
+    private Button btnBorrarVarios;
+	
+	@FXML
 	private TableView<Cantante> tablaCantante;
 	
 	@FXML
@@ -40,7 +59,7 @@ public class VentanaPrincipalController {
     private TableColumn<Cantante, String> tcNombre;
 	
 	@FXML
-    private TableColumn<Cantante, String> tcFechaNac;
+    private TableColumn<Cantante, Date> tcFechaNac;
 	
 	@FXML
     private TableColumn<Cantante, String> tcNacionalidad;
@@ -48,30 +67,53 @@ public class VentanaPrincipalController {
 	@FXML
     private TableColumn<Cantante, Integer> tcGenero;
 	
+	private ArrayList<PreparedStatement> arrayCantantes= new ArrayList<PreparedStatement>();
 	
 	
+	//Cargan los datos en la tabla
 	
-
 	public void initialize() {
 		modelo = new Modelo();
 		tablaCantante.setItems(modelo.transicionDatos());
 		tcID.setCellValueFactory(new PropertyValueFactory<Cantante,Integer>("ID"));
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nombre"));
-		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nacimiento"));
+		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante,Date>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nacionalidad"));
 		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante,Integer>("Genero"));
-		modelo.transicionDatos();
 		
 	}
 	
 	public void insertarDatos() {
-		Cantante cantante = new Cantante(txtNombre.getText(), txtFechaNac.getText(), txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
+		Cantante cantante = new Cantante(txtNombre.getText(), Date.valueOf(dateFechaNac.getValue()), txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
 		modelo.insercionDatos(cantante);
 		this.initialize();
 	}
 	
+	public void borrarDatos() {
+		modelo.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
+		this.initialize();
+	}
 	
+	public void insertarVariosDatos() {
+		Cantante cantante = new Cantante(txtNombre.getText(), Date.valueOf(dateFechaNac.getValue()), txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
+		arrayCantantes.add(modelo.insercionVariosDatos(cantante));
+		this.initialize();
+	}
 	
+	public void borrarVariosDatos() {
+		arrayCantantes.add(modelo.borradoVariosDatos(tablaCantante.getSelectionModel().getSelectedItem()));
+		this.initialize();
+	}
+	
+	public void aceptarInsertarVariosDatos() {
+		modelo.aceptarInsercionVariosDatos(arrayCantantes);
+		this.initialize();
+	}
+	
+	public void cancelarInsertarVariosDatos() {
+		arrayCantantes = modelo.cancelarInsercionVariosDatos(arrayCantantes);
+		this.initialize();
+	}
 	
 	public TextField getTxtNombre() {
 		return txtNombre;
@@ -81,12 +123,12 @@ public class VentanaPrincipalController {
 		this.txtNombre = txtNombre;
 	}
 
-	public TextField getTxtFechaNac() {
-		return txtFechaNac;
+	public DatePicker getDateFechaNac() {
+		return dateFechaNac;
 	}
 
-	public void setTxtFechaNac(TextField txtFechaNac) {
-		this.txtFechaNac = txtFechaNac;
+	public void setDateFechaNac(DatePicker txtFechaNac) {
+		this.dateFechaNac = txtFechaNac;
 	}
 
 	public TextField getTxtNacionalidad() {

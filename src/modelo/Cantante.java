@@ -1,14 +1,16 @@
 package modelo;
 
+import java.sql.Date;
+
 public class Cantante {
 	
 	private int ID;
 	private String Nombre;
-	private String Nacimiento;
+	private Date Nacimiento;
 	private String Nacionalidad;
 	private int Genero;
 	
-	public Cantante(int iD, String nombre, String nacimiento, String nacionalidad, int genero) {
+	public Cantante(int iD, String nombre, Date nacimiento, String nacionalidad, int genero) {
 		ID = iD;
 		Nombre = nombre;
 		Nacimiento = nacimiento;
@@ -16,7 +18,7 @@ public class Cantante {
 		Genero = genero;
 	}
 	
-	public Cantante(String nombre, String nacimiento, String nacionalidad, int genero) {
+	public Cantante(String nombre, Date nacimiento, String nacionalidad, int genero) {
 		Nombre = nombre;
 		Nacimiento = nacimiento;
 		Nacionalidad = nacionalidad;
@@ -39,11 +41,11 @@ public class Cantante {
 		Nombre = nombre;
 	}
 
-	public String getNacimiento() {
+	public Date getNacimiento() {
 		return Nacimiento;
 	}
 
-	public void setNacimiento(String nacimiento) {
+	public void setNacimiento(Date nacimiento) {
 		Nacimiento = nacimiento;
 	}
 
@@ -62,9 +64,5 @@ public class Cantante {
 	public void setGenero(int genero) {
 		Genero = genero;
 	}
-	
-
-	
-	
 	
 }
