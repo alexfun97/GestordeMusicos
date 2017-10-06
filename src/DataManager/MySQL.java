@@ -1,16 +1,24 @@
-package modelo;
+package DataManager;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import modelo.Cantante;
 
-public class Modelo {
+public class MySQL implements DataManager{
 	private String url = "jdbc:mysql://localhost/proyecto2DAMP";
 	private String usr = "root";
 	private String pwd = "";
@@ -150,8 +158,6 @@ public class Modelo {
 
 	public void aceptarInsercionVariosDatos(ArrayList<PreparedStatement> aux) {
 		System.out.println("Aceptar inserción...");
-		cantantes = FXCollections.observableArrayList();
-		Connection conex = conexion();
 		try {
 			for (int x = 0; x < aux.size(); x++) {
 				System.out.println("Registro completado.");
@@ -171,8 +177,6 @@ public class Modelo {
 
 	public ArrayList<PreparedStatement> cancelarInsercionVariosDatos(ArrayList<PreparedStatement> aux) {
 		System.out.println("Cancelar inserción...");
-		cantantes = FXCollections.observableArrayList();
-		Connection conex = conexion();
 		while (aux.size() != 0) {
 			System.out.println("Vaciando array...");
 			aux.remove(0);
@@ -181,36 +185,26 @@ public class Modelo {
 		return aux;
 	}
 
-	public void exporteAFichero() {
+	public void exportarDatos() {
 		cantantes = FXCollections.observableArrayList();
 		Connection conex = conexion();
 		try {
-			File archivo = new File("cantantes.txt");
-			FileWriter leerArchivo = new FileWriter(archivo);
-			PrintWriter p = new PrintWriter(leerArchivo);
 			ResultSet resultado = conex.createStatement().executeQuery("SELECT * FROM `cantante`");
-			ArrayList<String> datosCantante = new ArrayList<String>();
+			ArrayList<Cantante> datosCantante = new ArrayList<Cantante>();
 			System.out.println("Pasar uno");
-			while (resultado.next()) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
+			
+			
 				for (int x = 1; x < (resultado.getMetaData().getColumnCount() + 1); x++) {
-					datosCantante.add(resultado.getString(x));
+					String[] aux = resultado.getString(3).split("-");
+					@SuppressWarnings("deprecation")
+					Date fech = new Date(Integer.parseInt(aux[0]), Integer.parseInt(aux[1]), Integer.parseInt(aux[2]));
+					datosCantante.add(new Cantante(Integer.parseInt(resultado.getString(0)), resultado.getString(1), fech, resultado.getString(3), Integer.parseInt(resultado.getString(4))));
 				}
-			}
 
-			p.print(datosCantante.get(0) + ", ");
-			p.print(datosCantante.get(1) + ", ");
-			p.print(datosCantante.get(2) + ", ");
-			p.print(datosCantante.get(3) + ", ");
-			p.println(datosCantante.get(5));
-
-			p.close();
-			leerArchivo.close();
-
-			resultado.close();
-
-		} catch (SQLException | IOException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
+}
 
 }
