@@ -18,7 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import modelo.Cantante;
 
-public class MySQL implements DataManager{
+public class MySQL implements DataManager {
 	private String url = "jdbc:mysql://localhost/proyecto2DAMP";
 	private String usr = "root";
 	private String pwd = "";
@@ -147,8 +147,9 @@ public class MySQL implements DataManager{
 		cantantes = FXCollections.observableArrayList();
 		Connection conex = conexion();
 		try {
-			PreparedStatement st = conex.prepareStatement("DELETE FROM `cantante`");
-			st.executeUpdate();
+			ResultSet st = conex.createStatement().executeQuery("DELETE FROM `cantante`");
+//			PreparedStatement st = conex.prepareStatement("DELETE FROM `cantante`");
+//			st.executeUpdate();
 			st.close();
 			conex.close();
 		} catch (SQLException e) {
@@ -185,7 +186,7 @@ public class MySQL implements DataManager{
 		return aux;
 	}
 
-	public void exportarDatos() {
+	public ArrayList<Cantante> exportarDatos() {
 		cantantes = FXCollections.observableArrayList();
 		Connection conex = conexion();
 		try {
@@ -193,18 +194,43 @@ public class MySQL implements DataManager{
 			ArrayList<Cantante> datosCantante = new ArrayList<Cantante>();
 			System.out.println("Pasar uno");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
+
+			for (int x = 1; x < (resultado.getMetaData().getColumnCount() + 1); x++) {
+				String[] aux = resultado.getString(3).split("-");
+				@SuppressWarnings("deprecation")
+				Date fech = new Date(Integer.parseInt(aux[0]), Integer.parseInt(aux[1]), Integer.parseInt(aux[2]));
+				datosCantante.add(new Cantante(Integer.parseInt(resultado.getString(0)), resultado.getString(1), fech,
+						resultado.getString(3), Integer.parseInt(resultado.getString(4))));
+			}
 			
-			
-				for (int x = 1; x < (resultado.getMetaData().getColumnCount() + 1); x++) {
-					String[] aux = resultado.getString(3).split("-");
-					@SuppressWarnings("deprecation")
-					Date fech = new Date(Integer.parseInt(aux[0]), Integer.parseInt(aux[1]), Integer.parseInt(aux[2]));
-					datosCantante.add(new Cantante(Integer.parseInt(resultado.getString(0)), resultado.getString(1), fech, resultado.getString(3), Integer.parseInt(resultado.getString(4))));
-				}
+			return datosCantante;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-}
-
+		return null;
+	}
+		public void importarDatos(ArrayList<Cantante> cantantes) {
+			Connection conex = conexion();
+			try {
+				for (int x=0; x<cantantes.size(); x++){
+					Cantante cantante = cantantes.get(x);
+					PreparedStatement resultado = conex.prepareStatement(
+							"INSERT INTO Cantante (Nombre, fechaNac, Nacionalidad, Genero) VALUES (?,?,?,?);");
+	
+					String nombre = cantante.getNombre();
+					Date fechaNac = cantante.getNacimiento();
+					String nacionalidad = cantante.getNacionalidad();
+					int genero = cantante.getGenero();
+	
+					resultado.setString(1, nombre);
+					resultado.setDate(2, fechaNac);
+					resultado.setString(3, nacionalidad);
+					resultado.setInt(4, genero);
+					resultado.executeUpdate();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 }

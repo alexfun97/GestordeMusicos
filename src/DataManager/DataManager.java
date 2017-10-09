@@ -25,6 +25,8 @@ public interface DataManager {
 	public void aceptarInsercionVariosDatos(ArrayList<PreparedStatement> aux);
 
 	public ArrayList<PreparedStatement> cancelarInsercionVariosDatos(ArrayList<PreparedStatement> aux);
-
-	public void exporteAFichero();
+	
+	public ArrayList<Cantante> exportarDatos();
+	
+	public void importarDatos(ArrayList<Cantante> cantantes);
 }

@@ -2,25 +2,32 @@ package vista;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import DataManager.File;
+import DataManager.MySQL;
 import controlador.Main;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import modelo.Cantante;
-import modelo.Modelo;
 
 public class VentanaPrincipalController {
-
-	private Modelo modelo;
+	
+	ObservableList<String> listMyFile = FXCollections.observableArrayList("MySQL","File");
+	
+	@FXML
+	private ComboBox despMyFile;
 	
 	@FXML
     private TextField txtNombre;
@@ -82,8 +89,10 @@ public class VentanaPrincipalController {
 	//Cargan los datos en la tabla
 	
 	public void initialize() {
-		modelo = new Modelo();
-		tablaCantante.setItems(modelo.transicionDatos());
+		despMyFile.setValue("MySQL");
+		despMyFile.setItems(listMyFile);
+		MySQL mysql = new MySQL();
+		tablaCantante.setItems(mysql.transicionDatos());
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante,Date>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nacionalidad"));
@@ -93,8 +102,13 @@ public class VentanaPrincipalController {
 	}
 	
 	public void refreshTabla() {
-		modelo = new Modelo();
-		tablaCantante.setItems(modelo.transicionDatos());
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			tablaCantante.setItems(mysql.transicionDatos());
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			tablaCantante.setItems(file.transicionDatos());
+		}
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante,Date>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante,String>("Nacionalidad"));
@@ -103,18 +117,36 @@ public class VentanaPrincipalController {
 	
 	public void insertarDatos() {
 		Cantante cantante = new Cantante(txtNombre.getText(), Date.valueOf(dateFechaNac.getValue()), txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
-		modelo.insercionDatos(cantante);
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			mysql.insercionDatos(cantante);
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			file.insercionDatos(cantante);
+		}
 		this.refreshTabla();
 	}
 	
 	public void borrarDatos() {
-		modelo.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			mysql.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			file.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
+		}
 		this.refreshTabla();
 	}
 	
 	public void insertarVariosDatos() {
 		Cantante cantante = new Cantante(txtNombre.getText(), Date.valueOf(dateFechaNac.getValue()), txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
-		arrayCantantes.add(modelo.insercionVariosDatos(cantante));
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			arrayCantantes.add(mysql.insercionVariosDatos(cantante));
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			arrayCantantes.add(file.insercionVariosDatos(cantante));
+		}
 		btnAñadir.setDisable(true);
 		btnBorrar.setDisable(true);
 		btnMostrarUno.setDisable(true);
@@ -125,7 +157,14 @@ public class VentanaPrincipalController {
 	
 	
 	public void mostrarUno() {
-		ArrayList<String> datosCantante = modelo.muestraUno(tablaCantante.getSelectionModel().getSelectedItem());
+		ArrayList<String> datosCantante = null;
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			datosCantante = mysql.muestraUno(tablaCantante.getSelectionModel().getSelectedItem());
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			datosCantante = file.muestraUno(tablaCantante.getSelectionModel().getSelectedItem());
+		}
 		
 		txtNombre.setText(datosCantante.get(1));
 		
@@ -158,12 +197,24 @@ public class VentanaPrincipalController {
 	}
 	
 	public void borrarTabla() {
-		modelo.borradoTabla();
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			mysql.borradoTabla();
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			file.borradoTabla();
+		}
 		this.refreshTabla();
 	}
 	
 	public void aceptarInsertarVariosDatos() {
-		modelo.aceptarInsercionVariosDatos(arrayCantantes);
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			mysql.aceptarInsercionVariosDatos(arrayCantantes);
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			file.aceptarInsercionVariosDatos(arrayCantantes);
+		}
 		btnAñadir.setDisable(false);
 		btnBorrar.setDisable(false);
 		btnAñadirVarios.setDisable(false);
@@ -174,7 +225,14 @@ public class VentanaPrincipalController {
 	}
 	
 	public void cancelarInsertarVariosDatos() {
-		arrayCantantes = modelo.cancelarInsercionVariosDatos(arrayCantantes);
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			arrayCantantes = mysql.cancelarInsercionVariosDatos(arrayCantantes);
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			arrayCantantes = file.cancelarInsercionVariosDatos(arrayCantantes);
+		}
+		
 		btnAñadir.setDisable(false);
 		btnBorrar.setDisable(false);
 		btnAñadirVarios.setDisable(false);
@@ -184,8 +242,16 @@ public class VentanaPrincipalController {
 		this.refreshTabla();
 	}
 	
-	public void exportarAFichero() {
-		modelo.exporteAFichero();
+	public void importarTabla() {
+		if(despMyFile.getValue()=="MySQL"){
+			MySQL mysql = new MySQL();
+			File file = new File();
+			file.importarDatos(mysql.exportarDatos());
+		} else if (despMyFile.getValue()=="File"){
+			File file = new File();
+			MySQL mysql = new MySQL();
+			mysql.importarDatos(file.exportarDatos());
+		}
 	}
 	
 	public TextField getTxtNombre() {
