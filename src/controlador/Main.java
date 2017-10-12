@@ -32,7 +32,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("../vista/ventanaPrincipal.fxml"));
             rootPane=(AnchorPane) loader.load();
             Scene scene = new Scene(rootPane);
-            stagePrincipal.setTitle("Ventana Principal");
+            stagePrincipal.setTitle("iTunes Library");
             stagePrincipal.setScene(scene);
             /*
              * A�adidos las llamadas del main al Controlador y del controlador al main ***/

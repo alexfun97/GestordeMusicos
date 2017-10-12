@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import DataManager.Filetxt;
 import DataManager.MySQL;
@@ -11,7 +12,10 @@ import controlador.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -186,12 +190,19 @@ public class VentanaPrincipalController {
 	}
 
 	public void borrarTabla() {
-		if (despMyFile.getValue() == "MySQL") {
-			mysql.borradoTabla();
-		} else if (despMyFile.getValue() == "Filetxt") {
-			file.borradoTabla();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Alerta");
+		alert.setHeaderText("¿Seguro que quieres borrar toda la tabla?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			if (despMyFile.getValue() == "MySQL") {
+				mysql.borradoTabla();
+			} else if (despMyFile.getValue() == "Filetxt") {
+				file.borradoTabla();
+			}
+			this.refreshTabla();
 		}
-		this.refreshTabla();
 	}
 
 	public void aceptarInsertarVariosDatos() {
@@ -226,10 +237,26 @@ public class VentanaPrincipalController {
 	}
 
 	public void importarTabla() {
+
 		if (despMyFile.getValue() == "MySQL") {
-			mysql.importarDatos(file.exportarDatos());
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres importar la tabla Filetxt a MySQL?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				mysql.importarDatos(file.exportarDatos());
+			}
+
 		} else if (despMyFile.getValue() == "Filetxt") {
-			file.importarDatos(mysql.exportarDatos());
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres importar la tabla MySQL a Filetxt?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				file.importarDatos(mysql.exportarDatos());
+			}
 		}
 		this.refreshTabla();
 	}
@@ -267,7 +294,6 @@ public class VentanaPrincipalController {
 	}
 
 	public void setProgramaPrincipal(Main main) {
-		// TODO Auto-generated method stub
 
 	}
 }
