@@ -73,7 +73,6 @@ public class MySQL implements DataManager {
 		cantantes = FXCollections.observableArrayList();
 		Connection conex = conexion();
 		try {
-			System.out.println("Borrando cantante...");
 			PreparedStatement resultado = conex.prepareStatement("DELETE FROM `cantante` WHERE cantante.ID = ?;");
 
 			int ID = cantante.getID();
@@ -82,7 +81,6 @@ public class MySQL implements DataManager {
 			resultado.executeUpdate();
 			resultado.close();
 			conex.close();
-			System.out.println("Borrado con éxito");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -96,7 +94,6 @@ public class MySQL implements DataManager {
 					.executeQuery("SELECT * FROM `cantante` WHERE cantante.ID = " + cantante.getID() + ";");
 			resultado.next();
 			ObservableList<String> datosCantante = FXCollections.observableArrayList();
-			System.out.println("Mostrar uno");
 			for (int x = 1; x < (resultado.getMetaData().getColumnCount() + 1); x++) {
 				datosCantante.add(resultado.getString(x));
 			}

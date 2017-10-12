@@ -6,9 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -99,10 +96,33 @@ public class Filetxt implements DataManager {
 	}
 
 	public ObservableList<String> muestraUno(Cantante selectedItem) {
-		cantantes = FXCollections.observableArrayList();
-		ObservableList<String> datosCantante = FXCollections.observableArrayList();
 		
-		return datosCantante;
+		cantantes = FXCollections.observableArrayList();
+		FileReader leerArchivo;
+		try {
+			leerArchivo = new FileReader(archivo);
+			BufferedReader br = new BufferedReader(leerArchivo);
+			String linea = br.readLine();
+			ObservableList<String> datosCantante = FXCollections.observableArrayList();
+			while (linea != null) {
+				String[] aux = linea.split(", ");
+				if(selectedItem.getID() == Integer.parseInt(aux[0])){
+					for (int x = 0; x < aux.length; x++) {
+						datosCantante.add(aux[x]);
+					}	
+				}
+				linea = br.readLine();
+			}
+			br.close();
+			leerArchivo.close();
+			return datosCantante;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+		
 	}
 
 	public void borradoTabla() {

@@ -1,3 +1,0 @@
-1, Alex, 2017-09-25, España, 1
-1, Skaynx, 2017-09-25, Espa, 1
-1, Skaynxnykm, 2017-09-25, Loakoa, 1
