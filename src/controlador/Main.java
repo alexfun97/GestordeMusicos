@@ -41,7 +41,7 @@ public class Main extends Application {
 
             stagePrincipal.show();
         } catch (IOException e) {
-            //tratar la excepci�n.
+           e.printStackTrace();
         }
    }
 }
