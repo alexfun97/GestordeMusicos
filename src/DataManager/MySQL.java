@@ -69,7 +69,7 @@ public class MySQL implements DataManager {
 		}
 	}
 
-	public ObservableList<Cantante> borradoDatos(Cantante cantante) {
+	public void borradoDatos(Cantante cantante) {
 		cantantes = FXCollections.observableArrayList();
 		Connection conex = conexion();
 		try {
@@ -86,7 +86,6 @@ public class MySQL implements DataManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return cantantes;
 	}
 
 	public ObservableList<String> muestraUno(Cantante cantante) {

@@ -9,7 +9,7 @@ public interface DataManager {
 
 	public void insercionDatos(Cantante cantante);
 
-	public ObservableList<Cantante> borradoDatos(Cantante cantante);
+	public void borradoDatos(Cantante cantante);
 
 	public ObservableList<String> muestraUno(Cantante cantante);
 

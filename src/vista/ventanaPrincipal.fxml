@@ -40,8 +40,7 @@
             <TableColumn fx:id="tcGenero" prefWidth="75.0" text="Género" />
          </columns>
       </TableView>
-      <Button fx:id="btnExportarAFichero" layoutX="577.0" layoutY="522.0" mnemonicParsing="false" onAction="#importarTabla" text="MySQL-File" />
-      <Button layoutX="369.0" layoutY="522.0" mnemonicParsing="false" text="File-MySQL" />
+      <Button fx:id="btnImportar" layoutX="543.0" layoutY="522.0" mnemonicParsing="false" onAction="#importarTabla" prefHeight="27.0" prefWidth="127.0" text="Importar" />
       <ComboBox fx:id="despMyFile" layoutX="28.0" layoutY="30.0" onAction="#refreshTabla" prefWidth="150.0" />
    </children>
 </AnchorPane>

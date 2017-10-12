@@ -2,11 +2,14 @@ package DataManager;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import modelo.Cantante;
@@ -67,7 +70,7 @@ public class Filetxt implements DataManager {
 		}
 	}
 
-	public ObservableList<Cantante> borradoDatos(Cantante cantante) {
+	public void borradoDatos(Cantante cantante) {
 		try {
 			for (int i = 0; i < cantantes.size(); i++) {
 				if (cantantes.get(i).getNombre().equals(cantante.getNombre()))
@@ -93,19 +96,13 @@ public class Filetxt implements DataManager {
 
 			e.printStackTrace();
 		}
-		return cantantes;
 	}
 
 	public ObservableList<String> muestraUno(Cantante selectedItem) {
-		return null;
-
-//		ArrayList<String> datosCantante = new ArrayList<String>();
-//		System.out.println("Mostrar uno");
-//		resultado.next();
-//		for (int x = 1; x < (resultado.getMetaData().getColumnCount() + 1); x++) {
-//			datosCantante.add(resultado.getString(x));
-//		}
-//		return datosCantante;
+		cantantes = FXCollections.observableArrayList();
+		ObservableList<String> datosCantante = FXCollections.observableArrayList();
+		
+		return datosCantante;
 	}
 
 	public void borradoTabla() {
