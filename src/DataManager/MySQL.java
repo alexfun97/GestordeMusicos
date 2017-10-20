@@ -10,9 +10,10 @@ import javafx.collections.ObservableList;
 import modelo.Cantante;
 
 public class MySQL implements DataManager {
-	private String url = "jdbc:mysql://localhost/proyecto2DAMP";
-	private String usr = "root";
-	private String pwd = "";
+	private DBData datos = new DBData();
+	private String url;
+	private String usr;
+	private String pwd;
 	private ObservableList<Cantante> cantantes;
 
 	public Connection conexion() {
@@ -25,6 +26,18 @@ public class MySQL implements DataManager {
 			return null;
 		}
 
+	}
+	
+	public void datosBBDD(){
+		datos.init();
+		url = datos.getUrl();
+		System.out.println(datos.getUrl());
+		usr = datos.getUsr();
+		if (datos.getPwd().equals("null")){
+			pwd = "";
+		}else{
+			pwd = datos.getPwd();
+		}	
 	}
 
 	public ObservableList<Cantante> transicionDatos() {

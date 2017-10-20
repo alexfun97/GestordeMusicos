@@ -10,8 +10,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="568.0" prefWidth="1003.0" styleClass="background" stylesheets="@../vista/application.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.VentanaPrincipalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1003.0" styleClass="background" stylesheets="@../vista/application.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.VentanaPrincipalController">
    <children>
+      <ComboBox fx:id="despMyFile" layoutX="28.0" layoutY="30.0" onAction="#refreshTabla" prefWidth="150.0" />
       <Label layoutX="19.0" layoutY="69.0" text="Nombre" />
       <TextField fx:id="txtNombre" layoutX="19.0" layoutY="96.0" />
       <Label layoutX="19.0" layoutY="148.0" text="Fecha de nacimiento" />
@@ -20,16 +21,15 @@
       <TextField fx:id="txtNacionalidad" layoutX="19.0" layoutY="254.0" />
       <Label layoutX="19.0" layoutY="306.0" text="Género" />
       <TextField fx:id="txtGenero" layoutX="19.0" layoutY="333.0" />
-      <Button fx:id="btnLimpiar" layoutX="114.0" layoutY="368.0" mnemonicParsing="false" onAction="#limpiar" text="Limpiar" />
-      <Button fx:id="btnAñadir" layoutX="19.0" layoutY="405.0" mnemonicParsing="false" onAction="#insertarDatos" prefHeight="31.0" prefWidth="80.0" text="Añadir" />
-      <Button fx:id="btnBorrar" layoutX="106.0" layoutY="405.0" mnemonicParsing="false" onAction="#borrarDatos" prefHeight="31.0" prefWidth="80.0" text="Borrar" />
-      <Button fx:id="btnAñadirVarios" layoutX="19.0" layoutY="443.0" mnemonicParsing="false" onAction="#insertarVariosDatos" prefHeight="31.0" prefWidth="80.0" text="Añadir+" />
-      <Button fx:id="btnMostrarUno" layoutX="106.0" layoutY="443.0" mnemonicParsing="false" onAction="#mostrarUno" prefHeight="31.0" prefWidth="80.0" text="Mostrar" />
-      <Button fx:id="btnAceptarAñadirVarios" layoutX="19.0" layoutY="481.0" mnemonicParsing="false" onAction="#aceptarInsertarVariosDatos" prefHeight="31.0" prefWidth="80.0" text="Aceptar" />
-      <Button fx:id="btnCancelarAñadirVarios" layoutX="106.0" layoutY="481.0" mnemonicParsing="false" onAction="#cancelarInsertarVariosDatos" prefHeight="31.0" prefWidth="80.0" text="Cancelar" />
-      <Button fx:id="btnBorrarTabla" layoutX="19.0" layoutY="519.0" mnemonicParsing="false" onAction="#borrarTabla" prefHeight="32.0" prefWidth="167.0" text="Borrar todo" />
-      <Separator layoutX="207.0" orientation="VERTICAL" prefHeight="568.0" prefWidth="1.0" />
-      <TableView fx:id="tablaCantante" layoutX="210.0" layoutY="-3.0" prefHeight="506.0" prefWidth="793.0">
+      <Button fx:id="btnLimpiar" layoutX="116.0" layoutY="389.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="27.0" prefWidth="70.0" text="Limpiar" />
+      <Button fx:id="btnAñadir" layoutX="14.0" layoutY="452.0" mnemonicParsing="false" onAction="#insertarDatos" prefHeight="31.0" prefWidth="80.0" text="Añadir" />
+      <Button fx:id="btnBorrar" layoutX="111.0" layoutY="452.0" mnemonicParsing="false" onAction="#borrarDatos" prefHeight="31.0" prefWidth="80.0" text="Borrar" />
+      <Button fx:id="btnAñadirVarios" layoutX="14.0" layoutY="499.0" mnemonicParsing="false" onAction="#insertarVariosDatos" prefHeight="47.0" prefWidth="177.0" text="Añadir+" />
+      <Button fx:id="btnMostrarUno" layoutX="19.0" layoutY="389.0" mnemonicParsing="false" onAction="#mostrarUno" prefHeight="27.0" prefWidth="70.0" text="Mostrar" />
+      <Button fx:id="btnAceptarAV" layoutX="14.0" layoutY="585.0" mnemonicParsing="false" onAction="#aceptarInsertarVD" prefHeight="31.0" prefWidth="80.0" text="Aceptar" />
+      <Button fx:id="btnCancelarAV" layoutX="14.0" layoutY="646.0" mnemonicParsing="false" onAction="#cancelarInsertarVD" prefHeight="31.0" prefWidth="80.0" text="Cancelar" />
+      <Separator layoutX="207.0" orientation="VERTICAL" prefHeight="566.0" prefWidth="0.0" />
+      <TableView fx:id="tablaCantante" layoutX="208.0" layoutY="-3.0" prefHeight="506.0" prefWidth="796.0">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -40,7 +40,22 @@
             <TableColumn fx:id="tcGenero" prefWidth="75.0" text="Género" />
          </columns>
       </TableView>
-      <Button fx:id="btnImportar" layoutX="543.0" layoutY="522.0" mnemonicParsing="false" onAction="#importarTabla" prefHeight="27.0" prefWidth="127.0" text="Importar" />
-      <ComboBox fx:id="despMyFile" layoutX="28.0" layoutY="30.0" onAction="#refreshTabla" prefWidth="150.0" />
+      <Button fx:id="btnImportar" layoutX="337.0" layoutY="516.0" mnemonicParsing="false" onAction="#importarTabla" prefHeight="39.0" prefWidth="140.0" text="Importar" />
+      <Button fx:id="btnBorrarTabla" layoutX="536.0" layoutY="516.0" mnemonicParsing="false" onAction="#borrarTabla" prefHeight="39.0" prefWidth="140.0" text="Borrar todo" />
+      <Button fx:id="btnExportar" layoutX="737.0" layoutY="516.0" mnemonicParsing="false" onAction="#exportarTabla" prefHeight="39.0" prefWidth="140.0" text="Exportar" />
+      <Separator layoutY="565.0" prefHeight="0.0" prefWidth="1003.0" />
+      <Button fx:id="btnBorrarAV" layoutX="111.0" layoutY="646.0" mnemonicParsing="false" onAction="#borrarDatosVD" prefHeight="31.0" prefWidth="80.0" text="Borrar" />
+      <Button fx:id="btnMostrarUnoAV" layoutX="111.0" layoutY="585.0" mnemonicParsing="false" onAction="#mostrarUnoVD" prefHeight="31.0" prefWidth="80.0" text="Mostrar" />
+      <TableView fx:id="tablaAddCantante" layoutX="208.0" layoutY="565.0" prefHeight="135.0" prefWidth="796.0">
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+         <columns>
+            <TableColumn fx:id="tcAddNombre" prefWidth="75.0" text="Nombre" />
+            <TableColumn fx:id="tcAddFechaNac" prefWidth="75.0" text="F.Nacimiento" />
+            <TableColumn fx:id="tcAddNacionalidad" prefWidth="75.0" text="Nacionalidad" />
+            <TableColumn fx:id="tcAddGenero" prefWidth="75.0" text="Género" />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>

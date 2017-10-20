@@ -3,9 +3,9 @@ package vista;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 
+import DataManager.DBData;
 import DataManager.Filetxt;
 import DataManager.MySQL;
 import controlador.Main;
@@ -59,16 +59,25 @@ public class VentanaPrincipalController {
 	private Button btnMostrarUno;
 
 	@FXML
-	private Button btnAceptarAñadirVarios;
+	private Button btnAceptarAV;
 
 	@FXML
-	private Button btnCancelarAñadirVarios;
+	private Button btnCancelarAV;
+	
+	@FXML
+	private Button btnBorrarAV;
+	
+	@FXML
+	private Button btnMostrarUnoAV;
 
 	@FXML
 	private Button btnBorrarTabla;
 
 	@FXML
 	private Button btnImportar;
+	
+	@FXML
+	private Button btnExportar;
 
 	@FXML
 	private TableView<Cantante> tablaCantante;
@@ -85,7 +94,22 @@ public class VentanaPrincipalController {
 	@FXML
 	private TableColumn<Cantante, Integer> tcGenero;
 
-	private ArrayList<Cantante> arrayCantantes = new ArrayList<Cantante>();
+	@FXML
+	private TableView<Cantante> tablaAddCantante;
+
+	@FXML
+	private TableColumn<Cantante, String> tcAddNombre;
+
+	@FXML
+	private TableColumn<Cantante, Date> tcAddFechaNac;
+
+	@FXML
+	private TableColumn<Cantante, String> tcAddNacionalidad;
+
+	@FXML
+	private TableColumn<Cantante, Integer> tcAddGenero;
+
+	private ObservableList<Cantante> arrayCantantes = FXCollections.observableArrayList();
 
 	private MySQL mysql = new MySQL();
 
@@ -94,25 +118,31 @@ public class VentanaPrincipalController {
 	// Cargan los datos en la tabla
 
 	public void initialize() {
+		mysql.datosBBDD();
 		despMyFile.setValue("MySQL");
 		despMyFile.setItems(listMyFile);
 		tablaCantante.setItems(mysql.transicionDatos());
-		btnImportar.setText("Importar Filetxt");
+		btnImportar.setText("Importar de Filetxt");
+		btnExportar.setText("Exportar a Filetxt");
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
 		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante, Integer>("Genero"));
-		btnAceptarAñadirVarios.setDisable(true);
-		btnCancelarAñadirVarios.setDisable(true);
+		btnAceptarAV.setDisable(true);
+		btnCancelarAV.setDisable(true);
+		btnBorrarAV.setDisable(true);
+		btnMostrarUnoAV.setDisable(true);
 	}
 
 	public void refreshTabla() {
 		if (despMyFile.getValue() == "MySQL") {
 			tablaCantante.setItems(mysql.transicionDatos());
-			btnImportar.setText("Importar Filetxt");
+			btnImportar.setText("Importar de Filetxt");
+			btnExportar.setText("Exportar a Filetxt");
 		} else if (despMyFile.getValue() == "Filetxt") {
 			tablaCantante.setItems(file.transicionDatos());
-			btnImportar.setText("Importar MySQL");
+			btnImportar.setText("Importar de MySQL");
+			btnExportar.setText("Exportar a MySQL");
 		}
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
@@ -149,12 +179,21 @@ public class VentanaPrincipalController {
 		} else if (despMyFile.getValue() == "Filetxt") {
 			arrayCantantes.add(cantante);
 		}
+		for (int x = 0; x < arrayCantantes.size(); x++) {
+			tablaAddCantante.setItems(arrayCantantes);
+			tcAddNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
+			tcAddFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
+			tcAddNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
+			tcAddGenero.setCellValueFactory(new PropertyValueFactory<Cantante, Integer>("Genero"));
+		}
 		btnAñadir.setDisable(true);
 		btnBorrar.setDisable(true);
-		btnMostrarUno.setDisable(true);
+		btnMostrarUno.setDisable(false);
 		btnBorrarTabla.setDisable(true);
-		btnAceptarAñadirVarios.setDisable(false);
-		btnCancelarAñadirVarios.setDisable(false);
+		btnBorrarAV.setDisable(false);
+		btnMostrarUnoAV.setDisable(false);
+		btnAceptarAV.setDisable(false);
+		btnCancelarAV.setDisable(false);
 		this.limpiar();
 		this.refreshTabla();
 	}
@@ -205,7 +244,7 @@ public class VentanaPrincipalController {
 		}
 	}
 
-	public void aceptarInsertarVariosDatos() {
+	public void aceptarInsertarVD() {
 		for (int x = 0; x < arrayCantantes.size(); x++) {
 			if (despMyFile.getValue() == "MySQL") {
 				mysql.insercionDatos(arrayCantantes.get(x));
@@ -218,21 +257,44 @@ public class VentanaPrincipalController {
 		btnBorrar.setDisable(false);
 		btnMostrarUno.setDisable(false);
 		btnBorrarTabla.setDisable(false);
-		btnAceptarAñadirVarios.setDisable(true);
-		btnCancelarAñadirVarios.setDisable(true);
+		btnBorrarAV.setDisable(true);
+		btnMostrarUnoAV.setDisable(true);
+		btnAceptarAV.setDisable(true);
+		btnCancelarAV.setDisable(true);
 		this.limpiar();
 		this.refreshTabla();
 	}
 
-	public void cancelarInsertarVariosDatos() {
+	public void cancelarInsertarVD() {
 		arrayCantantes.clear();
 		btnAñadir.setDisable(false);
 		btnBorrar.setDisable(false);
 		btnMostrarUno.setDisable(false);
 		btnBorrarTabla.setDisable(false);
-		btnAceptarAñadirVarios.setDisable(true);
-		btnCancelarAñadirVarios.setDisable(true);
+		btnBorrarAV.setDisable(true);
+		btnMostrarUnoAV.setDisable(true);
+		btnAceptarAV.setDisable(true);
+		btnCancelarAV.setDisable(true);
 		this.limpiar();
+		this.refreshTabla();
+	}
+	
+	public void mostrarUnoVD() {
+		
+		txtNombre.setText(tablaAddCantante.getSelectionModel().getSelectedItem().getNombre());
+
+		LocalDate fech = LocalDate.parse(tablaAddCantante.getSelectionModel().getSelectedItem().getNacimiento(), DateTimeFormatter.ofPattern("yyyy-MM-d"));
+
+		dateFechaNac.setValue(fech);
+
+		txtNacionalidad.setText(tablaAddCantante.getSelectionModel().getSelectedItem().getNacionalidad());
+
+		txtGenero.setText(String.valueOf(tablaAddCantante.getSelectionModel().getSelectedItem().getGenero()));
+	
+	}
+	
+	public void borrarDatosVD() {
+		arrayCantantes.remove(tablaAddCantante.getSelectionModel().getSelectedItem());
 		this.refreshTabla();
 	}
 
@@ -256,6 +318,31 @@ public class VentanaPrincipalController {
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK) {
 				file.importarDatos(mysql.exportarDatos());
+			}
+		}
+		this.refreshTabla();
+	}
+	
+	public void exportarTabla() {
+
+		if (despMyFile.getValue() == "MySQL") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres exportar la tabla MySQL a Filetxt?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				file.importarDatos(mysql.exportarDatos());
+			}
+
+		} else if (despMyFile.getValue() == "Filetxt") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres exportar la tabla Filetxt a MySQL?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				mysql.importarDatos(file.exportarDatos());
 			}
 		}
 		this.refreshTabla();
