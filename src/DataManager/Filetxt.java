@@ -109,7 +109,7 @@ public class Filetxt implements DataManager {
 	public void borradoDatos(Cantante cantante) {
 		try {
 			for (int i = 0; i < cantantes.size(); i++) {
-				if (cantantes.get(i).getNombre().equals(cantante.getNombre()))
+				if (cantantes.get(i).getID() == (cantante.getID()))
 					this.cantantes.remove(i);
 			}
 
@@ -119,7 +119,25 @@ public class Filetxt implements DataManager {
 				String nombre = cantantes.get(x).getNombre();
 				String fechaNac = cantantes.get(x).getNacimiento();
 				String nacionalidad = cantantes.get(x).getNacionalidad();
-				int genero = cantantes.get(x).getGenero();
+				
+				FileReader leerbbddGenero = new FileReader(bbddGenero);
+				BufferedReader brGenero = new BufferedReader(leerbbddGenero);
+				String lineaGenero = brGenero.readLine();
+				String[] auxG = lineaGenero.split(", ");
+				String genero = null;
+				
+				while (lineaGenero != null) {
+					if (cantantes.get(x).getGenero().equals(auxG[1])) {
+						genero = auxG[0];
+					}
+					if (cantantes.get(x).getGenero().equals(auxG[1])) {
+						lineaGenero = null;
+					} else {
+						lineaGenero = brGenero.readLine();
+						auxG = lineaGenero.split(", ");
+					}
+				}
+				
 				pr.print("1" + ", ");
 				pr.print(nombre + ", ");
 				pr.print(fechaNac + ", ");
@@ -158,7 +176,7 @@ public class Filetxt implements DataManager {
 								if (auxC[x].equals(auxG[0])) {
 									datosCantante.add(auxG[1]);
 								}
-								if (auxC[0].equals(auxG[0])) {
+								if (auxC[x].equals(auxG[0])) {
 									lineaGenero = null;
 								} else {
 									lineaGenero = brGenero.readLine();
@@ -184,7 +202,7 @@ public class Filetxt implements DataManager {
 
 	public void borradoTabla() {
 		try {
-			FileWriter p = new FileWriter(archivo);
+			FileWriter p = new FileWriter(bbddCantante);
 			PrintWriter pr = new PrintWriter(p, true);
 			pr.print("");
 			pr.close();
