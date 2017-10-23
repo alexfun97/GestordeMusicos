@@ -26,7 +26,7 @@ import modelo.Cantante;
 
 public class VentanaPrincipalController {
 
-	ObservableList<String> listMyFile = FXCollections.observableArrayList("MySQL", "Filetxt");
+	private ObservableList<String> listMyFile = FXCollections.observableArrayList("MySQL", "Filetxt");
 
 	@FXML
 	private ComboBox<String> despMyFile;
@@ -39,9 +39,12 @@ public class VentanaPrincipalController {
 
 	@FXML
 	private TextField txtNacionalidad;
+	
+	@FXML
+	private ObservableList<String> generoList = FXCollections.observableArrayList();
 
 	@FXML
-	private TextField txtGenero;
+	private ComboBox<String> cbGenero;
 
 	@FXML
 	private Button btnLimpiar;
@@ -92,7 +95,7 @@ public class VentanaPrincipalController {
 	private TableColumn<Cantante, String> tcNacionalidad;
 
 	@FXML
-	private TableColumn<Cantante, Integer> tcGenero;
+	private TableColumn<Cantante, String> tcGenero;
 
 	@FXML
 	private TableView<Cantante> tablaAddCantante;
@@ -107,7 +110,7 @@ public class VentanaPrincipalController {
 	private TableColumn<Cantante, String> tcAddNacionalidad;
 
 	@FXML
-	private TableColumn<Cantante, Integer> tcAddGenero;
+	private TableColumn<Cantante, String> tcAddGenero;
 
 	private ObservableList<Cantante> arrayCantantes = FXCollections.observableArrayList();
 
@@ -121,13 +124,10 @@ public class VentanaPrincipalController {
 		mysql.datosBBDD();
 		despMyFile.setValue("MySQL");
 		despMyFile.setItems(listMyFile);
-		tablaCantante.setItems(mysql.transicionDatos());
-		btnImportar.setText("Importar de Filetxt");
-		btnExportar.setText("Exportar a Filetxt");
-		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
-		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
-		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
-		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante, Integer>("Genero"));
+		generoList.addAll(mysql.nombreGeneros());
+		cbGenero.setValue(mysql.nombreGeneros().get(0));
+		cbGenero.setItems(generoList);
+		this.refreshTabla();
 		btnAceptarAV.setDisable(true);
 		btnCancelarAV.setDisable(true);
 		btnBorrarAV.setDisable(true);
@@ -147,12 +147,12 @@ public class VentanaPrincipalController {
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
-		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante, Integer>("Genero"));
+		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Genero"));
 	}
 
 	public void insertarDatos() {
 		Cantante cantante = new Cantante(txtNombre.getText(), dateFechaNac.getValue().toString(),
-				txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
+				txtNacionalidad.getText(), cbGenero.getValue());
 		if (despMyFile.getValue() == "MySQL") {
 			mysql.insercionDatos(cantante);
 		} else if (despMyFile.getValue() == "Filetxt") {
@@ -173,7 +173,7 @@ public class VentanaPrincipalController {
 
 	public void insertarVariosDatos() {
 		Cantante cantante = new Cantante(txtNombre.getText(), dateFechaNac.getValue().toString(),
-				txtNacionalidad.getText(), Integer.parseInt(txtGenero.getText()));
+				txtNacionalidad.getText(), cbGenero.getValue());
 		if (despMyFile.getValue() == "MySQL") {
 			arrayCantantes.add(cantante);
 		} else if (despMyFile.getValue() == "Filetxt") {
@@ -184,7 +184,7 @@ public class VentanaPrincipalController {
 			tcAddNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 			tcAddFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
 			tcAddNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
-			tcAddGenero.setCellValueFactory(new PropertyValueFactory<Cantante, Integer>("Genero"));
+			tcAddGenero.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Genero"));
 		}
 		btnAñadir.setDisable(true);
 		btnBorrar.setDisable(true);
@@ -214,7 +214,7 @@ public class VentanaPrincipalController {
 
 		txtNacionalidad.setText(datosCantante.get(3));
 
-		txtGenero.setText(String.valueOf(datosCantante.get(4)));
+		cbGenero.setValue(datosCantante.get(4));
 	}
 
 	public void limpiar() {
@@ -225,7 +225,7 @@ public class VentanaPrincipalController {
 
 		txtNacionalidad.setText(null);
 
-		txtGenero.setText(null);
+		cbGenero.setValue(null);
 	}
 
 	public void borrarTabla() {
@@ -289,7 +289,7 @@ public class VentanaPrincipalController {
 
 		txtNacionalidad.setText(tablaAddCantante.getSelectionModel().getSelectedItem().getNacionalidad());
 
-		txtGenero.setText(String.valueOf(tablaAddCantante.getSelectionModel().getSelectedItem().getGenero()));
+		cbGenero.setValue(tablaAddCantante.getSelectionModel().getSelectedItem().getGenero());
 	
 	}
 	
@@ -372,12 +372,12 @@ public class VentanaPrincipalController {
 		this.txtNacionalidad = txtNacionalidad;
 	}
 
-	public TextField getTxtGenero() {
-		return txtGenero;
+	public ComboBox<String> getTxtGenero() {
+		return cbGenero;
 	}
 
-	public void setTxtGenero(TextField txtGenero) {
-		this.txtGenero = txtGenero;
+	public void setTxtGenero(ComboBox<String> txtGenero) {
+		this.cbGenero = txtGenero;
 	}
 
 	public void setProgramaPrincipal(Main main) {

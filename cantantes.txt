@@ -1,2 +1,6 @@
-1, Alex, 2017-09-26, Español, 1
+1, Alex, 2017-09-26, Estonio, 3
 2, Skab, 2017-10-02, España, 1
+3, Pablo, 2017-08-02, Uranio, 2
+4, Ivan, 2017-09-26, Canario, 4
+5, Jaime, 2017-09-26, Serbio, 2
+6, Skab, 2017-10-02, España, 1

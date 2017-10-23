@@ -6,9 +6,9 @@ public class Cantante {
 	private String Nombre;
 	private String Nacimiento;
 	private String Nacionalidad;
-	private int Genero;
+	private String Genero;
 	
-	public Cantante(int iD, String nombre, String nacimiento, String nacionalidad, int genero) {
+	public Cantante(int iD, String nombre, String nacimiento, String nacionalidad, String genero) {
 		ID = iD;
 		Nombre = nombre;
 		Nacimiento = nacimiento;
@@ -16,7 +16,7 @@ public class Cantante {
 		Genero = genero;
 	}
 	
-	public Cantante(String nombre, String nacimiento, String nacionalidad, int genero) {
+	public Cantante(String nombre, String nacimiento, String nacionalidad, String genero) {
 		Nombre = nombre;
 		Nacimiento = nacimiento;
 		Nacionalidad = nacionalidad;
@@ -55,11 +55,11 @@ public class Cantante {
 		Nacionalidad = nacionalidad;
 	}
 
-	public int getGenero() {
+	public String getGenero() {
 		return Genero;
 	}
 
-	public void setGenero(int genero) {
+	public void setGenero(String genero) {
 		Genero = genero;
 	}
 	

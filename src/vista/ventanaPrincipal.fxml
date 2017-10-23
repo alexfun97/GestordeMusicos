@@ -20,7 +20,6 @@
       <Label layoutX="19.0" layoutY="227.0" text="Nacionalidad" />
       <TextField fx:id="txtNacionalidad" layoutX="19.0" layoutY="254.0" />
       <Label layoutX="19.0" layoutY="306.0" text="Género" />
-      <TextField fx:id="txtGenero" layoutX="19.0" layoutY="333.0" />
       <Button fx:id="btnLimpiar" layoutX="116.0" layoutY="389.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="27.0" prefWidth="70.0" text="Limpiar" />
       <Button fx:id="btnAñadir" layoutX="14.0" layoutY="452.0" mnemonicParsing="false" onAction="#insertarDatos" prefHeight="31.0" prefWidth="80.0" text="Añadir" />
       <Button fx:id="btnBorrar" layoutX="111.0" layoutY="452.0" mnemonicParsing="false" onAction="#borrarDatos" prefHeight="31.0" prefWidth="80.0" text="Borrar" />
@@ -57,5 +56,6 @@
             <TableColumn fx:id="tcAddGenero" prefWidth="75.0" text="Género" />
          </columns>
       </TableView>
+      <ComboBox fx:id="cbGenero" layoutX="19.0" layoutY="333.0" prefHeight="27.0" prefWidth="167.0" />
    </children>
 </AnchorPane>
