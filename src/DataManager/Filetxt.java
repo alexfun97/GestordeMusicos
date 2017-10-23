@@ -42,8 +42,6 @@ public class Filetxt implements DataManager {
 				while (lineaGenero != null) {
 					if (auxC[4].equals(auxG[0])) {
 						gen = auxG[1];
-					}
-					if (auxC[4].equals(auxG[0])) {
 						lineaGenero = null;
 					} else {
 						lineaGenero = brGenero.readLine();
@@ -89,8 +87,6 @@ public class Filetxt implements DataManager {
 					pr.print(fechaNac + ", ");
 					pr.print(nacionalidad + ", ");
 					pr.println(genero);
-				}
-				if (cantante.getGenero().equals(auxG[1])) {
 					lineaGenero = null;
 				} else {
 					lineaGenero = brGenero.readLine();
@@ -119,25 +115,23 @@ public class Filetxt implements DataManager {
 				String nombre = cantantes.get(x).getNombre();
 				String fechaNac = cantantes.get(x).getNacimiento();
 				String nacionalidad = cantantes.get(x).getNacionalidad();
-				
+
 				FileReader leerbbddGenero = new FileReader(bbddGenero);
 				BufferedReader brGenero = new BufferedReader(leerbbddGenero);
 				String lineaGenero = brGenero.readLine();
 				String[] auxG = lineaGenero.split(", ");
 				String genero = null;
-				
+
 				while (lineaGenero != null) {
 					if (cantantes.get(x).getGenero().equals(auxG[1])) {
 						genero = auxG[0];
-					}
-					if (cantantes.get(x).getGenero().equals(auxG[1])) {
 						lineaGenero = null;
 					} else {
 						lineaGenero = brGenero.readLine();
 						auxG = lineaGenero.split(", ");
 					}
 				}
-				
+
 				pr.print("1" + ", ");
 				pr.print(nombre + ", ");
 				pr.print(fechaNac + ", ");
@@ -175,8 +169,6 @@ public class Filetxt implements DataManager {
 							while (lineaGenero != null) {
 								if (auxC[x].equals(auxG[0])) {
 									datosCantante.add(auxG[1]);
-								}
-								if (auxC[x].equals(auxG[0])) {
 									lineaGenero = null;
 								} else {
 									lineaGenero = brGenero.readLine();
@@ -242,6 +234,31 @@ public class Filetxt implements DataManager {
 		br.close();
 		leerArchivo.close();
 		return x + 1;
+	}
+
+	public ObservableList<String> nombreGeneros() {
+		ObservableList<String> nombre = FXCollections.observableArrayList();
+		FileReader leerbbddGenero;
+		try {
+			leerbbddGenero = new FileReader(bbddGenero);
+			BufferedReader brGenero = new BufferedReader(leerbbddGenero);
+			String lineaGenero = brGenero.readLine();;
+			
+			
+			while (lineaGenero != null) {	
+				String[] auxG = lineaGenero.split(", ");
+				String genero = auxG[1];
+				nombre.add(genero);
+				lineaGenero = brGenero.readLine();
+			}
+			return nombre;
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }

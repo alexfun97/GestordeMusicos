@@ -1,6 +1,6 @@
-1, Alex, 2017-09-26, Estonio, 3
-2, Pablo, 2017-08-02, Uranio, 2
-3, Ivan, 2017-09-26, Canario, 4
-4, Jaime, 2017-09-26, Serbio, 2
-6, Alex, 2017-09-26, Estonio, 1
-7, Jaime, 2017-09-26, Serbio, 2
+1, Alex, 2017-09-26, Español, 1
+2, Jaime, 2017-10-02, Inglaterra, 3
+3, Ivan, 2017-10-02, Rusia, 4
+4, Alberto, 2017-10-02, Danes, 2
+5, Lone, 2017-10-03, Italiano, 3
+6, Dani, 2017-09-26, Estados Unidos, 2

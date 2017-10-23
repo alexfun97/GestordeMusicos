@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import DataManager.DBData;
 import DataManager.Filetxt;
 import DataManager.MySQL;
 import controlador.Main;
@@ -124,9 +123,6 @@ public class VentanaPrincipalController {
 		mysql.datosBBDD();
 		despMyFile.setValue("MySQL");
 		despMyFile.setItems(listMyFile);
-		generoList.addAll(mysql.nombreGeneros());
-		cbGenero.setValue(mysql.nombreGeneros().get(0));
-		cbGenero.setItems(generoList);
 		this.refreshTabla();
 		btnAceptarAV.setDisable(true);
 		btnCancelarAV.setDisable(true);
@@ -139,10 +135,18 @@ public class VentanaPrincipalController {
 			tablaCantante.setItems(mysql.transicionDatos());
 			btnImportar.setText("Importar de Filetxt");
 			btnExportar.setText("Exportar a Filetxt");
+			generoList.clear();
+			generoList.addAll(mysql.nombreGeneros());
+			cbGenero.setValue(mysql.nombreGeneros().get(0));
+			cbGenero.setItems(generoList);
 		} else if (despMyFile.getValue() == "Filetxt") {
 			tablaCantante.setItems(file.transicionDatos());
 			btnImportar.setText("Importar de MySQL");
 			btnExportar.setText("Exportar a MySQL");
+			generoList.clear();
+			generoList.addAll(file.nombreGeneros());
+			cbGenero.setValue(file.nombreGeneros().get(0));
+			cbGenero.setItems(generoList);
 		}
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
@@ -225,7 +229,7 @@ public class VentanaPrincipalController {
 
 		txtNacionalidad.setText(null);
 
-		cbGenero.setValue(null);
+		cbGenero.setValue(mysql.nombreGeneros().get(0));
 	}
 
 	public void borrarTabla() {
