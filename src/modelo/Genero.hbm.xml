@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="modelo.Genero" table="genero">
+		<id name="ID" type="int">
+			<column name="ID" />
+			<generator class="increment" />
+		</id>
+
+		<property name="Nombre" type="string">
+			<column name="nombre" length="30" not-null="true" />
+		</property>
+		
+		
+		<property name="Año" type="int">
+			<column name="añoCreacion" length="4" not-null="true" />
+		</property>
+		
+	</class>
+
+</hibernate-mapping>

@@ -7,10 +7,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import modelo.Cantante;
+import modelo.Genero;
 
 public class Filetxt implements DataManager {
 
@@ -38,10 +42,10 @@ public class Filetxt implements DataManager {
 				BufferedReader brGenero = new BufferedReader(leerbbddGenero);
 				String lineaGenero = brGenero.readLine();
 				String[] auxG = lineaGenero.split(", ");
-				String gen = null;
+				Genero gen = null;
 				while (lineaGenero != null) {
 					if (auxC[4].equals(auxG[0])) {
-						gen = auxG[1];
+						gen = new Genero(Integer.parseInt(auxG[0]), auxG[1], Integer.parseInt(auxG[2]));
 						lineaGenero = null;
 					} else {
 						lineaGenero = brGenero.readLine();
@@ -69,7 +73,7 @@ public class Filetxt implements DataManager {
 		String nombre = cantante.getNombre();
 		String fechaNac = cantante.getNacimiento();
 		String nacionalidad = cantante.getNacionalidad();
-		int genero = 0;
+		Genero genero = null;
 
 		FileReader leerbbddGenero;
 		try {
@@ -80,13 +84,13 @@ public class Filetxt implements DataManager {
 			while (lineaGenero != null) {
 				FileWriter p = new FileWriter(bbddCantante, true);
 				PrintWriter pr = new PrintWriter(p, true);
-				if (cantante.getGenero().equals(auxG[1])) {
-					genero = Integer.parseInt(auxG[0]);
+				if (cantante.getGenero().getNombre().equals(auxG[1])) {
+					genero = new Genero(Integer.parseInt(auxG[0]), auxG[1], Integer.parseInt(auxG[2]));
 					pr.print(this.darID() + ", ");
 					pr.print(nombre + ", ");
 					pr.print(fechaNac + ", ");
 					pr.print(nacionalidad + ", ");
-					pr.println(genero);
+					pr.println(genero.getID());
 					lineaGenero = null;
 				} else {
 					lineaGenero = brGenero.readLine();
@@ -103,10 +107,13 @@ public class Filetxt implements DataManager {
 	}
 
 	public void borradoDatos(Cantante cantante) {
+		
 		try {
 			for (int i = 0; i < cantantes.size(); i++) {
-				if (cantantes.get(i).getID() == (cantante.getID()))
+				if (cantantes.get(i).getID() == (cantante.getID())){
 					this.cantantes.remove(i);
+					i = cantantes.size();
+				}
 			}
 
 			FileWriter p = new FileWriter(bbddCantante);
@@ -123,7 +130,7 @@ public class Filetxt implements DataManager {
 				String genero = null;
 
 				while (lineaGenero != null) {
-					if (cantantes.get(x).getGenero().equals(auxG[1])) {
+					if (cantantes.get(x).getGenero().getNombre().equals(auxG[1])) {
 						genero = auxG[0];
 						lineaGenero = null;
 					} else {
@@ -132,7 +139,7 @@ public class Filetxt implements DataManager {
 					}
 				}
 
-				pr.print("1" + ", ");
+				pr.print(this.darID() + ", ");
 				pr.print(nombre + ", ");
 				pr.print(fechaNac + ", ");
 				pr.print(nacionalidad + ", ");
@@ -140,6 +147,7 @@ public class Filetxt implements DataManager {
 			}
 			pr.close();
 			p.close();
+			
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -148,7 +156,6 @@ public class Filetxt implements DataManager {
 
 	public ObservableList<String> muestraUno(Cantante selectedItem) {
 
-		cantantes = FXCollections.observableArrayList();
 		FileReader leerbbddCantante;
 		try {
 			leerbbddCantante = new FileReader(bbddCantante);
@@ -219,7 +226,6 @@ public class Filetxt implements DataManager {
 	}
 
 	public int darID() throws IOException {
-		cantantes = FXCollections.observableArrayList();
 		FileReader leerArchivo = new FileReader(bbddCantante);
 		BufferedReader br = new BufferedReader(leerArchivo);
 		String linea = br.readLine();
@@ -242,23 +248,60 @@ public class Filetxt implements DataManager {
 		try {
 			leerbbddGenero = new FileReader(bbddGenero);
 			BufferedReader brGenero = new BufferedReader(leerbbddGenero);
-			String lineaGenero = brGenero.readLine();;
-			
-			
-			while (lineaGenero != null) {	
+			String lineaGenero = brGenero.readLine();
+			;
+
+			while (lineaGenero != null) {
 				String[] auxG = lineaGenero.split(", ");
 				String genero = auxG[1];
 				nombre.add(genero);
 				lineaGenero = brGenero.readLine();
 			}
 			return nombre;
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
+	@Override
+	public Genero pedirGenero(String nomGenero) {
+		Genero genero = null;
+		FileReader leerbbddCantante;
+
+		try {
+			leerbbddCantante = new FileReader(bbddCantante);
+			BufferedReader brCantante = new BufferedReader(leerbbddCantante);
+			String lineaCantante = brCantante.readLine();
+
+			while (lineaCantante != null) {
+				String[] auxC = lineaCantante.split(", ");
+
+				FileReader leerbbddGenero = new FileReader(bbddGenero);
+				BufferedReader brGenero = new BufferedReader(leerbbddGenero);
+				String lineaGenero = brGenero.readLine();
+				String[] auxG = lineaGenero.split(", ");
+
+				while (lineaGenero != null) {
+					if (auxG[1].equals(nomGenero)) {
+						genero = new Genero(Integer.parseInt(auxG[0]), auxG[1], Integer.parseInt(auxG[2]));
+						lineaGenero = null;
+					} else {
+						lineaGenero = brGenero.readLine();
+						auxG = lineaGenero.split(", ");
+					}
+				}
+
+				return genero;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 }

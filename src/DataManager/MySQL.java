@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import modelo.Cantante;
@@ -41,33 +44,39 @@ public class MySQL implements DataManager {
 			pwd = datos.getPwd();
 		}
 	}
+	
+	public HashMap<Integer, Genero> obtenerGeneros(){
+		Connection conex = conexion();
+		ResultSet qGenero;
+		
+		try {
+			qGenero = conex.createStatement().executeQuery("SELECT * FROM genero");
+			Genero genero = null;
+			HashMap<Integer, Genero> generos = new HashMap<Integer, Genero>();
+
+			while (qGenero.next()) {
+				genero = new Genero(qGenero.getInt("ID"), qGenero.getString("nombre"),
+						qGenero.getInt("añoCreacion"));
+				generos.put(qGenero.getInt("ID"), genero);
+			}
+			
+			return generos;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public ObservableList<Cantante> transicionDatos() {
 		cantantes = FXCollections.observableArrayList();
 		Connection conex = conexion();
 		try {
 			ResultSet qCantante = conex.createStatement().executeQuery("SELECT * FROM cantante");
-			while (qCantante.next()) {
-				ResultSet qGenero = conex.createStatement().executeQuery("SELECT * FROM genero");
-				Genero genero = null;
-				ObservableList<Genero> generos = FXCollections.observableArrayList();
-
-				while (qGenero.next()) {
-					genero = new Genero(qGenero.getInt("ID"), qGenero.getString("nombre"),
-							qGenero.getInt("añoCreacion"));
-					generos.add(genero);
-				}
-
-				int idCantGen = qCantante.getInt("genero");
-				
-				int x;
-
-				for (x = 0; idCantGen != generos.get(x).getID(); x++) {
-				}
+			while (qCantante.next()){ 
 				cantantes.add(new Cantante(qCantante.getInt("ID"), qCantante.getString("nombre"),
 						qCantante.getString("fechaNac"), qCantante.getString("nacionalidad"),
-						generos.get(x).getNombre()));
-				qGenero.close();
+						obtenerGeneros().get(qCantante.getInt("genero"))));
 			}
 			qCantante.close();
 			conex.close();
@@ -89,7 +98,7 @@ public class MySQL implements DataManager {
 			String nacionalidad = cantante.getNacionalidad();
 			int genero = 0;
 			while (qGenero.next()) {
-				if (qGenero.getString("nombre").equals(cantante.getGenero())) {
+				if (qGenero.getString("nombre").equals(cantante.getGenero().getNombre())) {
 					genero = qGenero.getInt("ID");
 				}
 			}
@@ -195,6 +204,26 @@ public class MySQL implements DataManager {
 			qGenero.close();
 			conex.close();
 			return nombre;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public Genero pedirGenero(String nomGenero) {
+		Genero genero = null;
+		Connection conex = conexion();
+		try {
+			ResultSet qGenero = conex.createStatement().executeQuery("SELECT * FROM genero");
+			while (qGenero.next()) {
+				if (qGenero.getString("nombre").equals(nomGenero)){
+					genero = new Genero(qGenero.getInt("ID"), qGenero.getString("nombre"), qGenero.getInt("añoCreacion"));
+				}
+			}
+			qGenero.close();
+			conex.close();
+			return genero;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

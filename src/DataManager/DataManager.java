@@ -2,6 +2,7 @@ package DataManager;
 
 import javafx.collections.ObservableList;
 import modelo.Cantante;
+import modelo.Genero;
 
 public interface DataManager {
 
@@ -18,4 +19,8 @@ public interface DataManager {
 	public ObservableList<Cantante> exportarDatos();
 	
 	public void importarDatos(ObservableList<Cantante> cantantes);
+	
+	public Genero pedirGenero(String nomGenero);
+
+	public ObservableList<String> nombreGeneros();
 }

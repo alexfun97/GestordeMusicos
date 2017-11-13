@@ -3,9 +3,11 @@ package vista;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import DataManager.Filetxt;
+import DataManager.Hibernate;
 import DataManager.MySQL;
 import controlador.Main;
 import javafx.collections.FXCollections;
@@ -22,10 +24,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import modelo.Cantante;
+import modelo.Genero;
 
 public class VentanaPrincipalController {
 
-	private ObservableList<String> listMyFile = FXCollections.observableArrayList("MySQL", "Filetxt");
+	private ObservableList<String> listMyFile = FXCollections.observableArrayList("MySQL", "Filetxt", "Hibernate");
 
 	@FXML
 	private ComboBox<String> despMyFile;
@@ -76,10 +79,16 @@ public class VentanaPrincipalController {
 	private Button btnBorrarTabla;
 
 	@FXML
-	private Button btnImportar;
+	private Button btnImportarArriba;
 	
 	@FXML
-	private Button btnExportar;
+	private Button btnExportarArriba;
+	
+	@FXML
+	private Button btnImportarAbajo;
+	
+	@FXML
+	private Button btnExportarAbajo;
 
 	@FXML
 	private TableView<Cantante> tablaCantante;
@@ -112,10 +121,14 @@ public class VentanaPrincipalController {
 	private TableColumn<Cantante, String> tcAddGenero;
 
 	private ObservableList<Cantante> arrayCantantes = FXCollections.observableArrayList();
+	
+	private ArrayList<Cantante> arrayAllCantantes = new ArrayList<Cantante>();
 
 	private MySQL mysql = new MySQL();
 
 	private Filetxt file = new Filetxt();
+	
+	private Hibernate hibernate = new Hibernate();
 
 	// Cargan los datos en la tabla
 
@@ -133,34 +146,59 @@ public class VentanaPrincipalController {
 	public void refreshTabla() {
 		if (despMyFile.getValue() == "MySQL") {
 			tablaCantante.setItems(mysql.transicionDatos());
-			btnImportar.setText("Importar de Filetxt");
-			btnExportar.setText("Exportar a Filetxt");
+			btnImportarArriba.setText("Importar de Filetxt");
+			btnExportarArriba.setText("Exportar a Filetxt");
+			btnImportarAbajo.setText("Importar de Hibernate");
+			btnExportarAbajo.setText("Exportar a Hibernate");
 			generoList.clear();
 			generoList.addAll(mysql.nombreGeneros());
 			cbGenero.setValue(mysql.nombreGeneros().get(0));
 			cbGenero.setItems(generoList);
 		} else if (despMyFile.getValue() == "Filetxt") {
 			tablaCantante.setItems(file.transicionDatos());
-			btnImportar.setText("Importar de MySQL");
-			btnExportar.setText("Exportar a MySQL");
+			btnImportarArriba.setText("Importar de Hibernate");
+			btnExportarArriba.setText("Exportar a Hibernate");
+			btnImportarAbajo.setText("Importar de MySQL");
+			btnExportarAbajo.setText("Exportar a MySQL");
 			generoList.clear();
 			generoList.addAll(file.nombreGeneros());
 			cbGenero.setValue(file.nombreGeneros().get(0));
 			cbGenero.setItems(generoList);
-		}
+		} else if (despMyFile.getValue() == "Hibernate") {
+			tablaCantante.setItems(hibernate.transicionDatos());
+			btnImportarArriba.setText("Importar de MySQL");
+			btnExportarArriba.setText("Exportar a MySQL");
+			btnImportarAbajo.setText("Importar de Filetxt");
+			btnExportarAbajo.setText("Exportar a Filetxt");
+			generoList.clear();
+			generoList.addAll(hibernate.nombreGeneros());
+			cbGenero.setValue(hibernate.nombreGeneros().get(0));
+			cbGenero.setItems(generoList);
+		} 
 		tcNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 		tcFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
 		tcNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
-		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Genero"));
+		tcGenero.setCellValueFactory(new PropertyValueFactory<Cantante, String>("NombreGenero"));
 	}
 
 	public void insertarDatos() {
+		Genero genero = null;
+		if (despMyFile.getValue() == "MySQL") {
+			genero = mysql.pedirGenero(cbGenero.getValue());
+		} else if (despMyFile.getValue() == "Filetxt") {
+			genero = file.pedirGenero(cbGenero.getValue());
+		} else if (despMyFile.getValue() == "Hibernate") {
+			genero = hibernate.pedirGenero(cbGenero.getValue());
+		}
+		
 		Cantante cantante = new Cantante(txtNombre.getText(), dateFechaNac.getValue().toString(),
-				txtNacionalidad.getText(), cbGenero.getValue());
+				txtNacionalidad.getText(), genero);
 		if (despMyFile.getValue() == "MySQL") {
 			mysql.insercionDatos(cantante);
 		} else if (despMyFile.getValue() == "Filetxt") {
 			file.insercionDatos(cantante);
+		} else if (despMyFile.getValue() == "Hibernate") {
+			hibernate.insercionDatos(cantante);
 		}
 		this.limpiar();
 		this.refreshTabla();
@@ -171,24 +209,33 @@ public class VentanaPrincipalController {
 			mysql.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
 		} else if (despMyFile.getValue() == "Filetxt") {
 			file.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
+		} else if (despMyFile.getValue() == "Hibernate") {
+			hibernate.borradoDatos(tablaCantante.getSelectionModel().getSelectedItem());
 		}
 		this.refreshTabla();
 	}
 
 	public void insertarVariosDatos() {
-		Cantante cantante = new Cantante(txtNombre.getText(), dateFechaNac.getValue().toString(),
-				txtNacionalidad.getText(), cbGenero.getValue());
+		Genero genero = null;
 		if (despMyFile.getValue() == "MySQL") {
-			arrayCantantes.add(cantante);
+			genero = mysql.pedirGenero(cbGenero.getValue());
 		} else if (despMyFile.getValue() == "Filetxt") {
-			arrayCantantes.add(cantante);
+			genero = file.pedirGenero(cbGenero.getValue());
+		} else if (despMyFile.getValue() == "Hibernate") {
+			genero = hibernate.pedirGenero(cbGenero.getValue());
 		}
+		
+		Cantante cantante = new Cantante(txtNombre.getText(), dateFechaNac.getValue().toString(),
+				txtNacionalidad.getText(), genero);
+		
+		arrayCantantes.add(cantante);
+		
 		for (int x = 0; x < arrayCantantes.size(); x++) {
 			tablaAddCantante.setItems(arrayCantantes);
 			tcAddNombre.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nombre"));
 			tcAddFechaNac.setCellValueFactory(new PropertyValueFactory<Cantante, Date>("Nacimiento"));
 			tcAddNacionalidad.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Nacionalidad"));
-			tcAddGenero.setCellValueFactory(new PropertyValueFactory<Cantante, String>("Genero"));
+			tcAddGenero.setCellValueFactory(new PropertyValueFactory<Cantante, String>("NombreGenero"));
 		}
 		btnAñadir.setDisable(true);
 		btnBorrar.setDisable(true);
@@ -208,6 +255,8 @@ public class VentanaPrincipalController {
 			datosCantante = mysql.muestraUno(tablaCantante.getSelectionModel().getSelectedItem());
 		} else if (despMyFile.getValue() == "Filetxt") {
 			datosCantante = file.muestraUno(tablaCantante.getSelectionModel().getSelectedItem());
+		} else if (despMyFile.getValue() == "Hibernate") {
+			datosCantante = hibernate.muestraUno(tablaCantante.getSelectionModel().getSelectedItem());
 		}
 
 		txtNombre.setText(datosCantante.get(1));
@@ -243,6 +292,8 @@ public class VentanaPrincipalController {
 				mysql.borradoTabla();
 			} else if (despMyFile.getValue() == "Filetxt") {
 				file.borradoTabla();
+			} else if (despMyFile.getValue() == "Filetxt") {
+				hibernate.borradoTabla();
 			}
 			this.refreshTabla();
 		}
@@ -254,6 +305,8 @@ public class VentanaPrincipalController {
 				mysql.insercionDatos(arrayCantantes.get(x));
 			} else if (despMyFile.getValue() == "Filetxt") {
 				file.insercionDatos(arrayCantantes.get(x));
+			} else if (despMyFile.getValue() == "Filetxt") {
+				hibernate.insercionDatos(arrayCantantes.get(x));
 			}
 		}
 		arrayCantantes.clear();
@@ -293,7 +346,7 @@ public class VentanaPrincipalController {
 
 		txtNacionalidad.setText(tablaAddCantante.getSelectionModel().getSelectedItem().getNacionalidad());
 
-		cbGenero.setValue(tablaAddCantante.getSelectionModel().getSelectedItem().getGenero());
+		cbGenero.setValue(tablaAddCantante.getSelectionModel().getSelectedItem().getGenero().getNombre());
 	
 	}
 	
@@ -302,7 +355,7 @@ public class VentanaPrincipalController {
 		this.refreshTabla();
 	}
 
-	public void importarTabla() {
+	public void importarTablaArriba() {
 
 		if (despMyFile.getValue() == "MySQL") {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -317,17 +370,61 @@ public class VentanaPrincipalController {
 		} else if (despMyFile.getValue() == "Filetxt") {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres importar la tabla Hibernate a Filetxt?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				file.importarDatos(hibernate.exportarDatos());
+			}
+			
+		} else if (despMyFile.getValue() == "Hibernate") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres importar la tabla MySQL a Hibernate?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				hibernate.importarDatos(mysql.exportarDatos());
+			}
+		}
+		this.refreshTabla();
+	}
+	public void importarTablaAbajo() {
+
+		if (despMyFile.getValue() == "MySQL") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres importar la tabla Hibernate a MySQL?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				mysql.importarDatos(hibernate.exportarDatos());
+			}
+
+		} else if (despMyFile.getValue() == "Filetxt") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
 			alert.setHeaderText("¿Seguro que quieres importar la tabla MySQL a Filetxt?");
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK) {
 				file.importarDatos(mysql.exportarDatos());
 			}
+			
+		} else if (despMyFile.getValue() == "Hibernate") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres importar la tabla Filetxt a Hibernate?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				hibernate.importarDatos(file.exportarDatos());
+			}
 		}
 		this.refreshTabla();
 	}
 	
-	public void exportarTabla() {
+	public void exportarTablaArriba() {
 
 		if (despMyFile.getValue() == "MySQL") {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -342,11 +439,54 @@ public class VentanaPrincipalController {
 		} else if (despMyFile.getValue() == "Filetxt") {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres exportar la tabla Filetxt a Hibernate?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				hibernate.importarDatos(file.exportarDatos());
+			}
+		} else if (despMyFile.getValue() == "Hibernate") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres exportar la tabla Hibernate a MySQL?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				mysql.importarDatos(hibernate.exportarDatos());
+			}
+		}
+		this.refreshTabla();
+	}
+	
+	public void exportarTablaAbajo() {
+
+		if (despMyFile.getValue() == "MySQL") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres exportar la tabla MySQL a Hibernate?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				hibernate.importarDatos(mysql.exportarDatos());
+			}
+
+		} else if (despMyFile.getValue() == "Filetxt") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
 			alert.setHeaderText("¿Seguro que quieres exportar la tabla Filetxt a MySQL?");
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK) {
 				mysql.importarDatos(file.exportarDatos());
+			}
+		} else if (despMyFile.getValue() == "Hibernate") {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Alerta");
+			alert.setHeaderText("¿Seguro que quieres exportar la tabla Hibernate a Filetxt?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				file.importarDatos(hibernate.exportarDatos());
 			}
 		}
 		this.refreshTabla();

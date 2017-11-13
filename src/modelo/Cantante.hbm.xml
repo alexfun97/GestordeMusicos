@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="modelo.Cantante" table="cantante">
+	
+		<id name="ID" type="int">
+			<column name="ID" />
+			<generator class="increment" />
+		</id>
+
+		<property name="Nombre" type="string">
+			<column name="nombre" length="30" not-null="true" />
+		</property>
+		
+		<property name="Nacimiento" type="string">
+			<column name="fechaNac" not-null="true" />
+		</property>
+		
+		<property name="Nacionalidad" type="string">
+			<column name="nacionalidad" length="30" not-null="true" />
+		</property>
+		
+		<property name="Genero" type="string">
+			<column name="genero" length="11" not-null="true" />
+		</property>
+		
+	</class>
+
+</hibernate-mapping>

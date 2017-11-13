@@ -1,20 +1,29 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class Genero {
 	
 	private int ID;
 	private String Nombre;
 	private int Año;
+//	private ArrayList<Cantante> arrayCantantes;
+	
+	public Genero(){
+		
+	}
 	
 	public Genero(int iD, String nombre, int año) {
 		ID = iD;
 		Nombre = nombre;
 		Año = año;
+		//setArrayCantantes(arC);
 	}
 
 	public Genero(String nombre, int año) {
 		Nombre = nombre;
 		Año = año;
+//		setArrayCantantes(arC);
 	}
 
 	public int getID() {
@@ -40,5 +49,13 @@ public class Genero {
 	public void setAño(int año) {
 		Año = año;
 	}
+
+//	public ArrayList<Cantante> getArrayCantantes() {
+//		return arrayCantantes;
+//	}
+//
+//	public void setArrayCantantes(ArrayList<Cantante> arrayCantantes) {
+//		this.arrayCantantes = arrayCantantes;
+//	}
 	
 }

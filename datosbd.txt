@@ -1,3 +1,3 @@
-Base de datos: jdbc:mysql://localhost/proyecto2DAMP
+Base de datos: jdbc:mysql://localhost/appmusica_mysql
 Usuario: root
 Clave: null
