@@ -1,5 +1,9 @@
 package DataManager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,25 +48,10 @@ public class Hibernate implements DataManager {
 
 	@Override
 	public void insercionDatos(Cantante cantante) {
-		Genero x = null;
-		Query q = session.createQuery("select e from Genero e");
-		List results = q.list();
 
-		Iterator cantantesIterator = results.iterator();
-
-		while (cantantesIterator.hasNext()) {
-			Genero cant = (Genero) cantantesIterator.next();
-			if(cant.getNombre().equals(cantante.getGenero())){
-				x = cant;
-			}
-
-		}
-		
-		cantante = new Cantante(cantante.getID(), cantante.getNombre(), cantante.getNacimiento(), cantante.getNacionalidad(), x.getNombre());
 		session.beginTransaction();
 		
-
-		session.save(cantante);
+		session.saveOrUpdate(cantante);
 		
 		session.getTransaction().commit();
 
@@ -70,32 +59,50 @@ public class Hibernate implements DataManager {
 
 	@Override
 	public void borradoDatos(Cantante cantante) {
-		// TODO Auto-generated method stub
+		
+		session.beginTransaction();
+		
+		session.delete(cantante);
+		
+		session.getTransaction().commit();
 
 	}
 
 	@Override
 	public ObservableList<String> muestraUno(Cantante cantante) {
-		// TODO Auto-generated method stub
-		return null;
+					
+			return datosCantante;
 	}
 
 	@Override
 	public void borradoTabla() {
-		// TODO Auto-generated method stub
+		
+		session.beginTransaction();
+		
+		Query q = session.createQuery("select e from Cantante e");
+		List results = q.list();
 
+		Iterator cantantesIterator = results.iterator();
+
+		while (cantantesIterator.hasNext()) {
+			Cantante cant = (Cantante) cantantesIterator.next();
+			session.delete(cant);
+		}
+		
+		session.getTransaction().commit();
 	}
 
-	@Override
 	public ObservableList<Cantante> exportarDatos() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.transicionDatos();
 	}
 
-	@Override
-	public void importarDatos(ObservableList<Cantante> cantantes) {
-		// TODO Auto-generated method stub
+	public void importarDatos(ObservableList<Cantante> arrayCantantes) {
 
+		this.borradoTabla();
+
+		for (int x = 0; x < arrayCantantes.size(); x++) {
+			this.insercionDatos(arrayCantantes.get(x));
+		}
 	}
 
 	@Override
@@ -117,8 +124,14 @@ public class Hibernate implements DataManager {
 
 	@Override
 	public Genero pedirGenero(String nomGenero) {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = session.createQuery("select e from Genero e where e.Nombre = '" + nomGenero + "'");
+		List results = q.list();
+
+		Iterator cantantesIterator = results.iterator();
+
+		Genero cant = (Genero) cantantesIterator.next();
+			
+		return cant;
 	}
 
 }

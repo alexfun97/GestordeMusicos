@@ -292,7 +292,7 @@ public class VentanaPrincipalController {
 				mysql.borradoTabla();
 			} else if (despMyFile.getValue() == "Filetxt") {
 				file.borradoTabla();
-			} else if (despMyFile.getValue() == "Filetxt") {
+			} else if (despMyFile.getValue() == "Hibernate") {
 				hibernate.borradoTabla();
 			}
 			this.refreshTabla();
@@ -305,7 +305,7 @@ public class VentanaPrincipalController {
 				mysql.insercionDatos(arrayCantantes.get(x));
 			} else if (despMyFile.getValue() == "Filetxt") {
 				file.insercionDatos(arrayCantantes.get(x));
-			} else if (despMyFile.getValue() == "Filetxt") {
+			} else if (despMyFile.getValue() == "Hibernate") {
 				hibernate.insercionDatos(arrayCantantes.get(x));
 			}
 		}

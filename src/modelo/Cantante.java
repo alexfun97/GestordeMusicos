@@ -9,7 +9,6 @@ public class Cantante {
 	private Genero Genero;
 	
 	public Cantante(){
-		
 	}
 	
 	public Cantante(int iD, String nombre, String nacimiento, String nacionalidad, Genero genero) {
@@ -69,6 +68,10 @@ public class Cantante {
 	
 	public String getNombreGenero() {
 		return Genero.getNombre();
+	}
+	
+	public void setNombreGenero(String nombreGenero) {
+		Genero.setNombre(nombreGenero);
 	}
 	
 }

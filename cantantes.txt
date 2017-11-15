@@ -2,5 +2,3 @@
 2, Jaime, 2017-10-02, Inglaterra, 3
 3, Ivan, 2017-10-02, Rusia, 4
 4, Alberto, 2017-10-02, Danes, 2
-5, Lone, 2017-10-03, Italiano, 3
-6, Dani, 2017-09-26, Estados Unidos, 2

@@ -23,9 +23,7 @@
 			<column name="nacionalidad" length="30" not-null="true" />
 		</property>
 		
-		<property name="Genero" type="string">
-			<column name="genero" length="11" not-null="true" />
-		</property>
+		<many-to-one name="Genero" class="modelo.Genero" cascade="save-update" />
 		
 	</class>
 
