@@ -51,7 +51,7 @@ public class Hibernate implements DataManager {
 
 		session.beginTransaction();
 		
-		session.saveOrUpdate(cantante);
+		session.save(cantante);
 		
 		session.getTransaction().commit();
 
@@ -71,7 +71,7 @@ public class Hibernate implements DataManager {
 	@Override
 	public ObservableList<String> muestraUno(Cantante cantante) {
 					
-			return datosCantante;
+			return null;
 	}
 
 	@Override
