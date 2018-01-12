@@ -148,7 +148,7 @@ public class JSON implements DataManager {
 			JSONObject objCantante = new JSONObject();
 			JSONObject objPeticion = new JSONObject();
 
-			objCantante.put("id", "= " + cantante.getID());
+			objCantante.put("id", " WHERE cantante.ID = " + cantante.getID());
 
 			objPeticion.put("peticion", "delete");
 			objPeticion.put("borrarCantante", objCantante);
@@ -178,7 +178,7 @@ public class JSON implements DataManager {
 			JSONObject objCantante = new JSONObject();
 			JSONObject objPeticion = new JSONObject();
 
-			objCantante.put("id", "> " + 0);
+			objCantante.put("id", "");
 
 			objPeticion.put("peticion", "delete");
 			objPeticion.put("borrarCantante", objCantante);

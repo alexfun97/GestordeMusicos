@@ -23,7 +23,7 @@ if(isset($parameters)){
 		
 		$id = $cantante["id"];
 		
-		$query  = "DELETE FROM cantante WHERE cantante.ID $id";
+		$query  = "DELETE FROM cantante $id";
 		
 		$result = $conn->query ( $query );
 		
