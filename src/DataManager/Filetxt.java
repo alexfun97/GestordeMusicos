@@ -2,14 +2,10 @@ package DataManager;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -154,51 +150,6 @@ public class Filetxt implements DataManager {
 		}
 	}
 
-	public ObservableList<String> muestraUno(Cantante selectedItem) {
-
-		FileReader leerbbddCantante;
-		try {
-			leerbbddCantante = new FileReader(bbddCantante);
-			BufferedReader brCantante = new BufferedReader(leerbbddCantante);
-			String lineaCantante = brCantante.readLine();
-			ObservableList<String> datosCantante = FXCollections.observableArrayList();
-			while (lineaCantante != null) {
-				String[] auxC = lineaCantante.split(", ");
-				if (selectedItem.getID() == Integer.parseInt(auxC[0])) {
-					for (int x = 0; x < auxC.length; x++) {
-						if (x != auxC.length - 1) {
-							datosCantante.add(auxC[x]);
-						} else {
-							FileReader leerbbddGenero = new FileReader(bbddGenero);
-							BufferedReader brGenero = new BufferedReader(leerbbddGenero);
-							String lineaGenero = brGenero.readLine();
-							String[] auxG = lineaGenero.split(", ");
-							while (lineaGenero != null) {
-								if (auxC[x].equals(auxG[0])) {
-									datosCantante.add(auxG[1]);
-									lineaGenero = null;
-								} else {
-									lineaGenero = brGenero.readLine();
-									auxG = lineaGenero.split(", ");
-								}
-							}
-						}
-					}
-				}
-				lineaCantante = brCantante.readLine();
-
-			}
-			brCantante.close();
-			leerbbddCantante.close();
-			return datosCantante;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-
-	}
-
 	public void borradoTabla() {
 		try {
 			FileWriter p = new FileWriter(bbddCantante);
@@ -302,6 +253,12 @@ public class Filetxt implements DataManager {
 			e.printStackTrace();
 		}
 		return null;
+		
+	}
+
+	@Override
+	public void modificado(Cantante cantante) {
+		// TODO Auto-generated method stub
 		
 	}
 }

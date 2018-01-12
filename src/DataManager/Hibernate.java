@@ -1,9 +1,5 @@
 package DataManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -69,12 +65,6 @@ public class Hibernate implements DataManager {
 	}
 
 	@Override
-	public ObservableList<String> muestraUno(Cantante cantante) {
-					
-			return null;
-	}
-
-	@Override
 	public void borradoTabla() {
 		
 		session.beginTransaction();
@@ -132,6 +122,17 @@ public class Hibernate implements DataManager {
 		Genero cant = (Genero) cantantesIterator.next();
 			
 		return cant;
+	}
+
+	@Override
+	public void modificado(Cantante cantante) {
+		
+		session.beginTransaction();
+		
+		session.update(cantante);
+		
+		session.getTransaction().commit();
+		
 	}
 
 }

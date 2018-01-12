@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.collections.FXCollections;
@@ -131,39 +130,35 @@ public class MySQL implements DataManager {
 			e.printStackTrace();
 		}
 	}
-
-	public ObservableList<String> muestraUno(Cantante cantante) {
-		cantantes = FXCollections.observableArrayList();
+	
+	@Override
+	public void modificado(Cantante cantante) {
 		Connection conex = conexion();
 		try {
-			ResultSet qCantante = conex.createStatement()
-					.executeQuery("SELECT * FROM `cantante` WHERE cantante.ID = " + cantante.getID() + ";");
-			qCantante.next();
+			PreparedStatement qCantante = conex.prepareStatement(
+					"UPDATE cantante SET nombre = ?, fechaNac = ?, nacionalidad = ?,"
+					+ " genero = ? WHERE ID = " + cantante.getID() + ";");
 			ResultSet qGenero = conex.createStatement().executeQuery("SELECT * FROM genero");
-			ObservableList<String> datosCantante = FXCollections.observableArrayList();
-			for (int x = 1; x < (qCantante.getMetaData().getColumnCount() + 1); x++) {
-				if (x == qCantante.getMetaData().getColumnCount()) {
-
-					String nombre = null;
-					while (qGenero.next()) {
-						if (qGenero.getInt("ID") == Integer.parseInt(qCantante.getString(x))) {
-							nombre = qGenero.getString("nombre");
-						}
-					}
-
-					datosCantante.add(nombre);
-				} else {
-					datosCantante.add(qCantante.getString(x));
+			String nombre = cantante.getNombre();
+			String fechaNac = cantante.getNacimiento();
+			String nacionalidad = cantante.getNacionalidad();
+			int genero = 0;
+			while (qGenero.next()) {
+				if (qGenero.getString("nombre").equals(cantante.getGenero().getNombre())) {
+					genero = qGenero.getInt("ID");
 				}
 			}
+
+			qCantante.setString(1, nombre);
+			qCantante.setString(2, fechaNac);
+			qCantante.setString(3, nacionalidad);
+			qCantante.setInt(4, genero);
+			qCantante.executeUpdate();
 			qCantante.close();
 			conex.close();
-			return datosCantante;
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	public void borradoTabla() {

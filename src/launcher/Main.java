@@ -1,12 +1,12 @@
- package controlador;
+package launcher;
 	
 import java.io.IOException;
 
 import vista.VentanaPrincipalController;
-import controlador.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import launcher.Main;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 

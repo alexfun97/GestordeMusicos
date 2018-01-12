@@ -12,8 +12,6 @@ public interface DataManager {
 
 	public void borradoDatos(Cantante cantante);
 
-	public ObservableList<String> muestraUno(Cantante cantante);
-
 	public void borradoTabla();
 	
 	public ObservableList<Cantante> exportarDatos();
@@ -23,4 +21,6 @@ public interface DataManager {
 	public Genero pedirGenero(String nomGenero);
 
 	public ObservableList<String> nombreGeneros();
+	
+	public void modificado(Cantante cantante);
 }
