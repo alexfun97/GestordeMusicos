@@ -16,5 +16,14 @@
 	<classpathentry kind="lib" path="lib/json/json_simple-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/json/okhttp-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/json/okio-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/bson-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/mongo-java-driver-3.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/mongodb-driver-3.3.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/mongodb-driver-3.3.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/morphia-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/morphia-1.2.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/mongodb-driver-core-3.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/mongodb-driver-async-3.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/mongo/mongodb-driver-3.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

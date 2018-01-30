@@ -16,7 +16,7 @@ public interface DataManager {
 	
 	public ObservableList<Cantante> exportarDatos();
 	
-	public void importarDatos(ObservableList<Cantante> cantantes);
+	public void importarDatos(ObservableList<Cantante> arrayCantantes);
 	
 	public Genero pedirGenero(String nomGenero);
 

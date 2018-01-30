@@ -245,7 +245,7 @@ public class JSON implements DataManager {
 			JSONObject objCantante = new JSONObject();
 			JSONObject objPeticion = new JSONObject();
 
-			objCantante.put("id", "= " + cantante.getID());
+			objCantante.put("id", cantante.getID());
 			objCantante.put("nombre", cantante.getNombre());
 			objCantante.put("fecha", cantante.getNacimiento());
 			objCantante.put("nacionalidad", cantante.getNacionalidad());
